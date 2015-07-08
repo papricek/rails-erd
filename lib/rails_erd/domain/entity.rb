@@ -20,7 +20,8 @@ module RailsERD
           }.flatten.compact.uniq.collect { |name| new(domain, name) }
         end
       end
-
+      
+      require 'active_support/inflector'
       extend Inspectable
       inspection_attributes :model
 
@@ -33,6 +34,10 @@ module RailsERD
       # The name of this entity. Equal to the class name of the corresponding
       # model (for concrete entities) or given name (for abstract entities).
       attr_reader :name
+      
+      def table_name
+        @name.tableize.gsub("/", "_")
+      end
 
       def initialize(domain, name, model = nil) # @private :nodoc:
         @domain, @name, @model = domain, name, model
